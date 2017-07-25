@@ -64,7 +64,7 @@ function start(param, response) {
 			
 			response.writeHead(200, {"Content-Type": "application/json; charset=utf-8"});
 //			response.write(JSON.stringify(res_arr));
-			response.write(res_arr[0].title+","+res_arr[0].link));
+			response.write(res_arr[0].title+","+res_arr[0].link);
 			response.end();
 
 /*			
