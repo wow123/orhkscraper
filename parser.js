@@ -61,6 +61,11 @@ function start(param, response) {
 				console.log(link);
 				res_arr.push({'title': title, 'link': link});
 			});
+			
+			response.writeHead(200, {"Content-Type": "application/json; charset=utf-8"});
+			response.write(JSON.stringify(res_arr));
+			response.end();
+
 /*			
 			$("title-wrapper").each(function() {
 				console.log("title-wrapper")
@@ -77,7 +82,7 @@ function start(param, response) {
 
 				res_arr.push({ 'name': text, 'link': href, 'img': src, 'address': address });
 			});
-*/
+
 			async.each(res_arr, function(restaurant, callback) {
 				href = restaurant.link;
 				var option = {
@@ -94,7 +99,7 @@ function start(param, response) {
 
 					result.on("end", function() {
 						var $$ = cheerio.load(data);
-						/*
+
 						restaurant.score = parseFloat($$(".rest_overall_score").children("span").text());
 
 						var coords = esprima.parse($$(".pg_main > script").first().text());
@@ -102,7 +107,7 @@ function start(param, response) {
 						restaurant.y = coords.body[1].expression.right.value;
 
 						restaurant.distance = distance.calculateDistance(params[0][1], params[1][1], restaurant.x, restaurant.y, 4);
-						*/
+
 						callback();
 					});
 				});
@@ -113,6 +118,7 @@ function start(param, response) {
 				response.write(JSON.stringify(res_arr));
 				response.end();
 			});
+*/
 		});
 	});
 }
