@@ -1,4 +1,5 @@
-var http = require("follow-redirects").http;
+//var http = require("follow-redirects").http;
+var https = require('https');
 var cheerio = require("cheerio");
 var esprima = require("esprima")
 var async = require("async")
@@ -36,7 +37,7 @@ function start(param, response) {
 		path: queryurl
 	}
 	
-	http.get(options, function(result) {
+	https.get(options, function(result) {
 		result.setEncoding('utf-8');
 		var data = "";
 		result.on("data", function(chunk) {
@@ -85,7 +86,7 @@ function start(param, response) {
 					path: href
 				}
 
-				http.get(option, function(result) {
+				https.get(option, function(result) {
 					var data = ""
 					result.on("data", function(chunk){
 						data += chunk;
