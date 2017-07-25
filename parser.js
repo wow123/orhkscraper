@@ -27,14 +27,13 @@ function start(param, response) {
 	}
 */
 
-	queryurl = base + param;
+	queryurl = encodeURI(base + param);
 
 	console.log("queryurl="+queryurl);
 	var options = {
 		host: openrice,
 		headers: {"User-Agent": agent },
-		//path: base + queryurl
-		path: "/zh/hongkong/restaurants?cuisineId=2009&districtId=2008"
+		path: queryurl
 	}
 	
 	http.get(options, function(result) {
