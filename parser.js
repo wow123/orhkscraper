@@ -1,8 +1,8 @@
-var http = require("http");
+var http = require("follow-redirects").http;
 var cheerio = require("cheerio");
 var esprima = require("esprima")
 var async = require("async")
-var distance = require("./distance")
+//var distance = require("./distance")
 
 function start(param, response) {
 	params = split(param);
@@ -11,10 +11,13 @@ function start(param, response) {
 	var openrice = "www.openrice.com";
 	var agent = "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13";
 
-	var base = "/english/restaurant/sr1.htm?";
-	var suffix = "&z=10&wxh=5x5&currentlocation=1";
+	var base = "/zh/hongkong/restaurants";
+//	var suffix = "&z=10&wxh=5x5&currentlocation=1";
+//	var queryurl = "cuisineId=2009&districtId=2008";
 	var queryurl = "";
+	
 
+/*
 	if(!keyword) {
 		// only x and y
 		queryurl = base + "x=" + params[0][1] + "&y=" + params[1][1] + suffix;
@@ -22,14 +25,20 @@ function start(param, response) {
 		// x, y, keyword
 		queryurl = base + "x=" + params[0][1] + "&y=" + params[1][1] + suffix + "&inputstrwhat=" + params[2][1];
 	}
+*/
 
+	queryurl = base + param;
+
+	console.log("queryurl="+queryurl);
 	var options = {
 		host: openrice,
 		headers: {"User-Agent": agent },
-		path: queryurl
+		//path: base + queryurl
+		path: "/zh/hongkong/restaurants?cuisineId=2009&districtId=2008"
 	}
 	
 	http.get(options, function(result) {
+		result.setEncoding('utf-8');
 		var data = "";
 		result.on("data", function(chunk) {
 			data += chunk;
@@ -37,10 +46,24 @@ function start(param, response) {
 
 		result.on("end", function() {
 			var $ = cheerio.load(data);
+			//console.log($.html());
 
 			var res_arr = [];
 
-			$("div.poiblock").each(function() {
+			//console.log($('h2[class=title-name]').html());
+			//var title = $('h2').filter('.title-name').attr('class');
+			$('h2[class=title-name]').each(function(i, elem){
+				//console.log($(this).html());
+				//title = $(this).text()
+				title = $(this).children().text();
+				link = decodeURI($(this).children().attr('href'));
+				console.log(title);	
+				console.log(link);
+				res_arr.push({'title': title, 'link': link});
+			});
+/*			
+			$("title-wrapper").each(function() {
+				console.log("title-wrapper")
 				var link = $(this).children(".ib").children(".sr1_poi_title").children(".sr1_title");
 				var text = link.text();
 				var href = link.attr("href");
@@ -54,7 +77,7 @@ function start(param, response) {
 
 				res_arr.push({ 'name': text, 'link': href, 'img': src, 'address': address });
 			});
-
+*/
 			async.each(res_arr, function(restaurant, callback) {
 				href = restaurant.link;
 				var option = {
@@ -71,6 +94,7 @@ function start(param, response) {
 
 					result.on("end", function() {
 						var $$ = cheerio.load(data);
+						/*
 						restaurant.score = parseFloat($$(".rest_overall_score").children("span").text());
 
 						var coords = esprima.parse($$(".pg_main > script").first().text());
@@ -78,14 +102,14 @@ function start(param, response) {
 						restaurant.y = coords.body[1].expression.right.value;
 
 						restaurant.distance = distance.calculateDistance(params[0][1], params[1][1], restaurant.x, restaurant.y, 4);
-
+						*/
 						callback();
 					});
 				});
 			}, function (err) {
 				if(err) return next(err);
 
-				response.writeHead(200, {"Content-Type": "application/json"});
+				response.writeHead(200, {"Content-Type": "application/json; charset=utf-8"});
 				response.write(JSON.stringify(res_arr));
 				response.end();
 			});
