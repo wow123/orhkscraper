@@ -59,12 +59,13 @@ function start(param, response) {
 				link = decodeURI($(this).children().attr('href'));
 				console.log(title);	
 				console.log(link);
-				res_arr.push({'title': title, 'link': link});
+				if (i<=1) {
+					res_arr.push({'title': title, 'link': link});
+				}
 			});
 			
 			response.writeHead(200, {"Content-Type": "application/json; charset=utf-8"});
-//			response.write(JSON.stringify(res_arr));
-			response.write(res_arr[0].title+","+res_arr[0].link);
+			response.write(JSON.stringify(res_arr));
 			response.end();
 
 /*			
