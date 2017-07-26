@@ -4,33 +4,26 @@ var cheerio = require("cheerio");
 var esprima = require("esprima")
 var async = require("async")
 //var distance = require("./distance")
+	var cuisines = ["1011^shanghai", "2001^korean", "2009^japanese"];
+	var dishes = ["1001^hotpot", "1014^dessert", "1019^bbq", "1032^buffet"];
+	var districts = ["1003^central","1012^aberdeen", "1019^causeway bay"];
+	var FBParamType = ["food", "location"];
+	var ORParamType = ["cuisineId", "dishesId", "districtId"];
 
 function start(param, response) {
-	params = split(param);
-	var keyword = params.length == 2 ? false : true;
-
+	var unwanted = "FeatureItem";
+	var resultLimit = 2;
 	var openrice = "www.openrice.com";
 	var agent = "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13";
 
 	var base = "/zh/hongkong/restaurants";
-//	var suffix = "&z=10&wxh=5x5&currentlocation=1";
-//	var queryurl = "cuisineId=2009&districtId=2008";
-	var queryurl = "";
+	var ORParams = split(param);
+	console.log("param=", param);
+	console.log("ORParams=", ORParams);
 	
-
-/*
-	if(!keyword) {
-		// only x and y
-		queryurl = base + "x=" + params[0][1] + "&y=" + params[1][1] + suffix;
-	} else {
-		// x, y, keyword
-		queryurl = base + "x=" + params[0][1] + "&y=" + params[1][1] + suffix + "&inputstrwhat=" + params[2][1];
-	}
-*/
-
-	queryurl = encodeURI(base + param);
-
+	var queryurl = encodeURI(base + ORParams);
 	console.log("queryurl="+queryurl);
+
 	var options = {
 		host: openrice,
 		headers: {"User-Agent": agent },
@@ -50,17 +43,19 @@ function start(param, response) {
 
 			var res_arr = [];
 
-			//console.log($('h2[class=title-name]').html());
-			//var title = $('h2').filter('.title-name').attr('class');
+			var cnt = 0;
 			$('h2[class=title-name]').each(function(i, elem){
 				//console.log($(this).html());
 				//title = $(this).text()
-				title = $(this).children().text();
-				link = decodeURI($(this).children().attr('href'));
-				console.log(title);	
-				console.log(link);
-				if (i<=1) {
-					res_arr.push({'title': title, 'link': link});
+				if ($(this).html().indexOf(unwanted) == -1) {
+					title = $(this).children().text();
+					link = decodeURI($(this).children().attr('href'));
+					console.log(title);	
+					console.log(link);
+					if (cnt < resultLimit) {
+						res_arr.push({'title': title, 'link': link});
+						cnt++;
+					}
 				}
 			});
 			
@@ -68,63 +63,11 @@ function start(param, response) {
 			response.write(JSON.stringify(res_arr));
 			response.end();
 
-/*			
-			$("title-wrapper").each(function() {
-				console.log("title-wrapper")
-				var link = $(this).children(".ib").children(".sr1_poi_title").children(".sr1_title");
-				var text = link.text();
-				var href = link.attr("href");
-				
-				var img = $(this).children(".sr1_content").children(".PR10").children(".rel_pos").children("a").children(".sr1_doorphoto");
-				var src = img.attr("style");
-				src = src.substring(15, src.length-2);
-
-				var add = $(this).children(".sr1_content").children("div.FL").children("div.sr1_data").children("div.ML5").first().text()
-				var address = add.replace(/(<([^>]+)>)/ig,"").substring(2, add.length-20);
-
-				res_arr.push({ 'name': text, 'link': href, 'img': src, 'address': address });
-			});
-
-			async.each(res_arr, function(restaurant, callback) {
-				href = restaurant.link;
-				var option = {
-					host: openrice,
-					headers: {"User-Agent": agent },
-					path: href
-				}
-
-				https.get(option, function(result) {
-					var data = ""
-					result.on("data", function(chunk){
-						data += chunk;
-					});
-
-					result.on("end", function() {
-						var $$ = cheerio.load(data);
-
-						restaurant.score = parseFloat($$(".rest_overall_score").children("span").text());
-
-						var coords = esprima.parse($$(".pg_main > script").first().text());
-						restaurant.x = coords.body[0].expression.right.value;
-						restaurant.y = coords.body[1].expression.right.value;
-
-						restaurant.distance = distance.calculateDistance(params[0][1], params[1][1], restaurant.x, restaurant.y, 4);
-
-						callback();
-					});
-				});
-			}, function (err) {
-				if(err) return next(err);
-
-				response.writeHead(200, {"Content-Type": "application/json; charset=utf-8"});
-				response.write(JSON.stringify(res_arr));
-				response.end();
-			});
-*/
 		});
 	});
 }
 
+/*
 function split(param) {
 	param = param.substring(1);
 	var params = [];
@@ -143,6 +86,81 @@ function split(param) {
 	}
 
 	return params;
+}
+*/
+
+function split(param) {
+	param = param.substring(1);
+	var ORParams = "";
+	var params = [];
+	params = param.toString().split("&");
+	var cnt = 0;
+	for (var i in params) {
+		params[i] = params[i].toString().split("=");
+		if (FBParamType.indexOf(params[i][0].toLowerCase()) > -1) {
+			var resParam = checkParam(params[i][0], params[i][1]);
+			if (resParam.length > 0) {
+				ORParams += (cnt == 0 ? "?" : "&") + resParam;	
+				cnt++;
+			}
+/*			
+			console.log("food para="+params[i][1]);
+			if (cuisines.indexOf(params[i][1]) > -1) {
+				// Parameter found
+				console.log("cuisines.indexOf="+cuisines.indexOf(params[i][1].toLowerCase()));
+			} else if (dishes.indexOf(params[i][1]) > -1) {
+				console.log("dishes.indexOf="+dishes.indexOf(params[i][1].toLowerCase()));
+			} else {
+				console.log("no match for food parameter");
+			}
+		} else if (params[i][0]=="location") {
+			if (districts.indexOf(params[i][1]) > -1) {
+				console.log("location.indexOf="+districts.indexOf(params[i][1].toLowerCase()));
+			}
+*/			
+		}
+	}
+	
+	console.log("ORParams:", ORParams);
+	return ORParams;
+}
+
+function checkParam(paramType, paramValue) {
+	var resParam = "";
+	var found = false;
+
+	if (paramType=="food") {
+		for (var i in cuisines) {
+			var cuisine = cuisines[i].toString().split("^");
+			if (cuisine[1].indexOf(paramValue.toLowerCase()) > -1) {
+				console.log("cusine matched="+cuisine);
+				resParam = ORParamType[0]+"="+cuisine[0];
+				found = true;
+				break;
+			}
+		}
+		if (!found) {
+			for (var i in dishes) {
+				var dish = dishes[i].toString().split("^");
+				if (dish[1].indexOf(paramValuetoLowerCase()) > -1) {
+					console.log("dishes matched="+dish);
+					resParam = ORParamType[1]+"="+dish[0];
+					break;
+				}
+			}
+		}
+	} else if (paramType=="location") {
+		for (var i in districts) {
+			var district = districts[i].toString().split("^");
+			if (district[1].indexOf(paramValue.toLowerCase()) > -1) {
+				console.log("district matched="+district);
+				resParam = ORParamType[2]+"="+district[0];
+				break;
+			}
+		}
+	}
+	console.log("resParam:", resParam);
+	return resParam;
 }
 
 exports.start = start;
