@@ -2,9 +2,8 @@
 var https = require('https');
 var cheerio = require("cheerio");
 var esprima = require("esprima")
-var async = require("async")
 //var distance = require("./distance")
-	var cuisines = ["1011^shanghai", "2001^korean", "2004^thai", "2009^japanese", "2010^mongkok];
+	var cuisines = ["1011^shanghai", "2001^korean", "2004^thai", "2009^japanese", "2010^mongkok"];
 	var dishes = ["1001^hotpot", "1014^dessert", "1019^bbq", "1032^buffet"];
 	var districts = ["1003^central","1012^aberdeen", "1019^causeway bay", "1022^wanchai"];
 	var FBParamType = ["food", "location"];
@@ -16,7 +15,7 @@ function start(param, response) {
 	var openrice = "www.openrice.com";
 	var agent = "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13";
 
-	var base = "	";
+	var base = "/zh/hongkong/restaurants";
 	var ORParams = split(param);
 	//console.log("param=", param);
 	//console.log("ORParams=", ORParams);
