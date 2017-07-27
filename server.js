@@ -7,15 +7,15 @@ function start() {
     function onRequest(request, response) {
         var pathname = url.parse(request.url).pathname;
         var param = url.parse(request.url).search;
-		console.log("pathname="+pathname);
-		console.log("param="+param);
+		//console.log("pathname="+pathname);
+		//console.log("param="+param);
         if(pathname != "/favicon.ico") {
-            console.log("Request received for " + pathname + " with " + param)
+            //console.log("Request received for " + pathname + " with " + param)
             if(param != null) {
                 parser.start(param, response);
             } else {
                 response.writeHead(416, {"Content-Type": "text/plain"});
-               response.write("Bad Request");
+				response.write("Bad Request");
                 response.end();
             }
         }
