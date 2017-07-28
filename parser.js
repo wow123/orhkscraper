@@ -6,8 +6,9 @@ var esprima = require("esprima")
 	var cuisines = ["1011^shanghai", "2001^korean", "2004^thai", "2009^japanese", "2010^mongkok"];
 	var dishes = ["1001^hotpot", "1014^dessert", "1019^bbq", "1032^buffet"];
 	var districts = ["1003^central","1012^aberdeen", "1019^causeway bay", "1022^wanchai"];
-	var FBParamType = ["food", "location"];
-	var ORParamType = ["cuisineId", "dishId", "districtId"];
+	var priceRanges = ["1","2", "3", "4", "5", "6"];
+	var FBParamType = ["food", "location", "pricerange"]; //Must in lowercase
+	var ORParamType = ["cuisineId", "dishId", "districtId", "priceRangeId"];
 
 function start(param, response) {
 	var unwanted = "FeatureItem";
@@ -17,8 +18,8 @@ function start(param, response) {
 
 	var base = "/zh/hongkong/restaurants";
 	var ORParams = split(param);
-	//console.log("param=", param);
-	//console.log("ORParams=", ORParams);
+	console.log("param=", param);
+	console.log("ORParams=", ORParams);
 	
 	if (!ORParams) {
 				response.writeHead(200, {"Content-Type": "application/json; charset=utf-8"});
@@ -26,7 +27,7 @@ function start(param, response) {
 				response.end();
 	} else {
 		var queryurl = encodeURI(base + ORParams);
-		//console.log("queryurl="+queryurl);
+		console.log("queryurl="+queryurl);
 
 		var options = {
 			host: openrice,
@@ -71,28 +72,6 @@ function start(param, response) {
 	}
 	
 }
-
-/*
-function split(param) {
-	param = param.substring(1);
-	var params = [];
-	var regex = /^x\=22\.[0-9]*\&y\=11[3-4]\.[0-9]*$/;
-	var regex2 = /^x\=22\.[0-9]*\&y\=11[3-4]\.[0-9]*\&keyword\=([A-Za-z ]|%20)*$/
-
-	if(regex.test(param)) {
-		params = param.toString().split("&");
-		params[0] = params[0].toString().split("=");
-		params[1] = params[1].toString().split("=");
-	} else if(regex2.test(param)) {
-		params = param.toString().split("&");
-		params[0] = params[0].toString().split("=");
-		params[1] = params[1].toString().split("=");
-		params[2] = params[2].toString().split("=");
-	}
-
-	return params;
-}
-*/
 
 function split(param) {
 	param = param.substring(1);
@@ -147,6 +126,10 @@ function checkParam(paramType, paramValue) {
 				resParam = ORParamType[2]+"="+district[0];
 				break;
 			}
+		}
+	} else if (paramType=="priceRange") {
+		if (priceRanges.indexOf(paramValue) > -1) {
+			resParam = ORParamType[3]+"="+paramValue;
 		}
 	}
 	//console.log("resParam:", resParam);
