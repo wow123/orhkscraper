@@ -64,35 +64,128 @@ Sort search results
 *(Optional)*  
 Comma-separated list of ID numbers that specify the type(s) of cuisine to search for
 ##### Known values:
-* `1002` -- Guangdong
+* 1001^chiu chow
+*`1002` -- Guangdong
+* 1005^Hakka
 * `1008` -- Sichuan
-* `1010` -- Beijing
-* `1011` -- Shanghai
-* `1023` -- Anhui
+* 1009^taiwanese
+*`1010` -- Beijing
+*`1011` -- Shanghai
+ `1023` -- Anhui
 * `1999` -- All Chinese
 * `2001` -- Korean
+* 2002^vietnamese
 * `2004` -- Thai
 * `2009` -- Japanese
-* `2999` -- All Asian
-* `3006` -- Italian
-* `3999` -- All European
-* `4002` -- Mexican
-* `4004` -- Brazilian
-* `4005` -- Argentinian
-* `4999` -- All North & South American
-* `5001` -- African
-* `5004` -- Egyptian
-* `5005` -- Moroccan
-* `5999` -- All Others
-* `6000` -- International *[Included in 5999]*
+* 2024^malaysian
+*`2999` -- All Asian
+* 3006^Italian
+ `3999` -- All European
+* 4001^american
+ `4002` -- Mexican
+ `4004` -- Brazilian
+ `4005` -- Argentinian
+ `4999` -- All North & South American
+ `5001` -- African
+ `5004` -- Egyptian
+ `5005` -- Moroccan
+ `5999` -- All Others
+ `6000` -- International *[Included in 5999]*
 
 ### district_id
 *(Optional)*  
 Comma-separated list of ID numbers that specify the districts to search within
 ##### Known values:
+* -9151^cyberport
+* -9008^knutsford terrace
+* -9007^Lan Kwai Fong
+* 1002^the peak
+* `1003` -- Central
+* 1007^Shek O
+* 1008^Western District
+* 1009^sai wan ho
+* 1010^stanley
+* 1011^admiralty
 * `1012` -- Aberdeen
+* 1013^Chai Wan
+* 1014^quarry bay
+* 1015^repulse bay
+* 1016^deep water bay
+* 1017^happy valley
+* 1018^shau kei wan
+* `1019` -- Causeway Bay
+* 1020^Ap Lei Chau
+* 1021^po fu lam
+* `1022` -- Wanchai
+* 1023^tai koo"
+* 1023^tai koo shing"
+* 1023^tai koo place"
+* 1025^tai hang
+* 1026^tin hau
+* 1027^wong chuk hang
 * `1999` -- Hong Kong
+* `1999` -- HK
+* `1999` -- HKG
+* 2001^kowloon city
+* 2002^kowloon tong
+* 2003^kowloon bay
+* 2004^to kwa wan
+* 2005^tai kok tsui
+* 2006^ngau tau kok
+* 2007^shek kip mei
 * `2008` -- Tsim Sha Tsui
+* 2009^ho man tin
+* 2010^mongkok
+* 2011^yau ma tei
+* 2012^yau tong
+* 2013^cheung sha wan
+* 2015^hung hum
+* 2016^lai chi kok
+* 2019^sham shui po
+* 2020^wong tai sin
+* 2021^tsz wan shan
+* 2022^san po kong
+* 2024^lam tin
+* 2026^kwun tong
+* 2027^diamond hill
+* 2028^jordan
+* 2029^price edward
+* 2030^lok fu
+* 2031^mei foo
+* 2032^choi hung
+* 2999^kowloon
+* 2999^all kowloon
+* 3001^sheung shui
+* 3002^tai po
+* 3003^yuen long
+* 3004^tin shui wai
+* 3005^tuen mun
+* 3006^sai kung
+* 3007^sha tin
+* 3008^fanling
+* 3009^ma on shan
+* 3010^sham tseng
+* 3011^lo wu
+* 3012^tai wai
+* 3013^fo tan
+* 3014^tai wo
+* 3015^kwai fong
+* 3016^lau fau shan
+* 3017^tsing yi
+* 3018^tsuen wan
+* 3019^kwai chung
+* `3020` -- Tseung Kwan O
+* 3021^lok ma chau
+* 3022^ma wan
+* 3999^new territories
+* 4001^lantau island
+* 4002^chek lap kok
+* 4003^ping chau
+* 4004^cheung chau
+* 4005^lamma island
+* 4006^discovery bay
+* 4010^tai o
+* 4999^outlying island
 
 ### dishes_id
 *(Optional)*  
@@ -100,9 +193,18 @@ Comma-separated list of ID numbers that specify the type(s) of dishes to search 
 ##### Known values:
 * `1001` -- Hot Pot
 * `1003` -- Bakery
+* `1004` -- Noodle
+* 1015^ramen
 * `1014` -- Dessert
+* 1018^congee
 * `1019` -- BBQ
+* 1020^Chinese BBQ
+* 1022^Pizza
 * `1032` -- Buffet
+* 1036^dim sum
+* 1039^Wonton
+* 1039^Dumpling
+* 1202^sweet soup
 
 ### amenity_id
 *(Optional)*  
