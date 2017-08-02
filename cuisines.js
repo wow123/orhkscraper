@@ -14,6 +14,8 @@ var cuisines = [
 "2024^malaysian",
 "2999^asian",
 "3006^italian",
+"3011^spain",
+"3011^spanish",
 "4001^american"];
 
 module.exports = cuisines;

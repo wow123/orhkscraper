@@ -6,10 +6,11 @@ var esprima = require("esprima");
 var cuisines = require("./cuisines");
 var dishes = require("./dishes");
 var districts = require("./districts");
+var categoryGroups = require("./categoryGroups");
 
 var priceRanges = ["1", "2", "3", "4", "5", "6"];
 var FBParamType = ["food", "location", "pricerange"]; //Must be in lowercase
-var ORParamType = ["cuisineId", "dishId", "districtId", "priceRangeId"];
+var ORParamType = ["cuisineId", "dishId", "districtId", "priceRangeId", "categoryGroupId"];
 var missingKeyParam = true;  //Key params are cuisineId, dishId
 
 function start(param, response) {
@@ -137,6 +138,18 @@ function checkParam(paramType, paramValue, noSpace) {
         if (dish[1].toLowerCase().indexOf(paramValue.toLowerCase()) > -1) {
           //console.log("dishes matched="+dish);
           resParam = ORParamType[1] + "=" + dish[0];
+          missingKeyParam = false;
+          break;
+        }
+      }
+    }
+		if (missingKeyParam) {
+      for (var i in categoryGroups) {
+        var categoryGroup = categoryGroups[i].toString().split("^");
+        if (noSpace) categoryGroup[1] = categoryGroup[1].replace(/\s/g, "");
+        if (categoryGroup[1].toLowerCase().indexOf(paramValue.toLowerCase()) > -1) {
+          //console.log("categoryGroups matched="+categoryGroup);
+          resParam = ORParamType[4] + "=" + categoryGroup[0];
           missingKeyParam = false;
           break;
         }
