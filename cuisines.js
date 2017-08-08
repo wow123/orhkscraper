@@ -2,7 +2,7 @@ var cuisines = [
 "1001^chiu chow",
 "1002^guangdong",
 "1005^Hakka",
-"1008^Sichuan",
+"1008^sichuan",
 "1009^taiwanese",
 "1010^beijing",
 "1011^shanghai",

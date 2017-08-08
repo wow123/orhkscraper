@@ -9,6 +9,8 @@ var dishes = [
 "1020^chinese bbq",
 "1022^pizza",
 "1032^buffet",
+"1034^shushi",
+"1034^sashimi",
 "1036^dim sum",
 "1039^Wonton",
 "1039^Dumpling",
